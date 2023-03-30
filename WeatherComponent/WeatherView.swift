@@ -100,14 +100,6 @@ final class WeatherView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-//    var weather: Weather? {
-//        didSet {
-//            if let weather = weather {
-//                configure(with: weather)
-//            }
-//        }
-//    }
-
     func configure(with data: Weather?, location: CLLocation?) {
         if let location = location {
             let geocoder = CLGeocoder()
@@ -125,7 +117,7 @@ final class WeatherView: UIView {
         }
 
         if let data = data {
-            iconView.image = UIImage(systemName: data.currentWeather.symbolName)
+            iconView.image = UIImage(named: data.currentWeather.symbolName)
 
             let formatter = MeasurementFormatter()
             formatter.unitStyle = .short
