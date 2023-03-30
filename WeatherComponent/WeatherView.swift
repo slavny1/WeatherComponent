@@ -7,6 +7,7 @@
 
 import UIKit
 import WeatherKit
+import CoreLocation
 
 final class WeatherView: UIView {
 
@@ -22,7 +23,27 @@ final class WeatherView: UIView {
         let label = UILabel()
         label.text = "00"
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 172, weight: .ultraLight)
+        label.font = UIFont.systemFont(ofSize: 148, weight: .ultraLight)
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let feelsLikeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "feels like"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 32, weight: .ultraLight)
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let lastUpdateLabel: UILabel = {
+        let label = UILabel()
+        label.text = "last update"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 16, weight: .ultraLight)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -43,22 +64,35 @@ final class WeatherView: UIView {
         addSubview(iconView)
         addSubview(tempLabel)
         addSubview(locationLabel)
+        addSubview(feelsLikeLabel)
+        addSubview(lastUpdateLabel)
 
         NSLayoutConstraint.activate([
+
+            locationLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            locationLabel.topAnchor.constraint(equalTo: topAnchor, constant: 100),
+            locationLabel.widthAnchor.constraint(equalToConstant: 400),
+            locationLabel.heightAnchor.constraint(equalToConstant: 100),
+
             iconView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            iconView.topAnchor.constraint(equalTo: topAnchor, constant: 150),
-            iconView.widthAnchor.constraint(equalToConstant: 100),
+            iconView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 50),
+            iconView.widthAnchor.constraint(equalToConstant: 250),
             iconView.heightAnchor.constraint(equalToConstant: 100),
 
             tempLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            tempLabel.topAnchor.constraint(equalTo: iconView.bottomAnchor, constant: 0),
+            tempLabel.topAnchor.constraint(equalTo: iconView.bottomAnchor, constant: 30),
             tempLabel.widthAnchor.constraint(equalToConstant: 300),
             tempLabel.heightAnchor.constraint(equalToConstant: 200),
 
-            locationLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            locationLabel.topAnchor.constraint(equalTo: tempLabel.bottomAnchor, constant: -50),
-            locationLabel.widthAnchor.constraint(equalToConstant: 200),
-            locationLabel.heightAnchor.constraint(equalToConstant: 100)
+            feelsLikeLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            feelsLikeLabel.topAnchor.constraint(equalTo: tempLabel.bottomAnchor, constant: -50),
+            feelsLikeLabel.widthAnchor.constraint(equalToConstant: 200),
+            feelsLikeLabel.heightAnchor.constraint(equalToConstant: 100),
+
+            lastUpdateLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            lastUpdateLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 5),
+            lastUpdateLabel.widthAnchor.constraint(equalToConstant: 350),
+            lastUpdateLabel.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
 
@@ -66,23 +100,44 @@ final class WeatherView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var weather: Weather? {
-        didSet {
-            if let weather = weather {
-                configure(with: weather)
+//    var weather: Weather? {
+//        didSet {
+//            if let weather = weather {
+//                configure(with: weather)
+//            }
+//        }
+//    }
+
+    func configure(with data: Weather?, location: CLLocation?) {
+        if let location = location {
+            let geocoder = CLGeocoder()
+            geocoder.reverseGeocodeLocation(location) { placemarks, error in
+                if let error = error {
+                    print("Error getting address: \(error.localizedDescription)")
+                    return
+                }
+                guard let placemarks = placemarks?.first else { return }
+
+                DispatchQueue.main.async {
+                    self.locationLabel.text = placemarks.locality ?? "No where"
+                }
             }
         }
-    }
 
-    func configure(with data: Weather) {
-        iconView.image = UIImage(systemName: data.currentWeather.symbolName)
-    }
-    /*
-     // Only override draw() if you perform custom drawing.
-     // An empty implementation adversely affects performance during animation.
-     override func draw(_ rect: CGRect) {
-     // Drawing code
-     }
-     */
+        if let data = data {
+            iconView.image = UIImage(systemName: data.currentWeather.symbolName)
 
+            let formatter = MeasurementFormatter()
+            formatter.unitStyle = .short
+            formatter.numberFormatter.maximumFractionDigits = 0
+            formatter.unitOptions = .providedUnit
+
+            tempLabel.text = formatter.string(from: data.currentWeather.temperature) + "C"
+            feelsLikeLabel.text = "feels like: " + formatter.string(from: data.currentWeather.apparentTemperature) + "C"
+
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
+            lastUpdateLabel.text = "last updated: " + dateFormatter.string(from: data.currentWeather.date)
+        }
+    }
 }

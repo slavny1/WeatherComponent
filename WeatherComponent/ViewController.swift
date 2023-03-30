@@ -39,11 +39,7 @@ final class ViewController: UIViewController, CLLocationManagerDelegate {
         Task {
             do {
                 let result = try await weatherManager.weather(for: location)
-                print("Current weather" + String(describing: result.currentWeather))
-                print("Daily forecast" + String(describing: result.dailyForecast))
-                print("Minute forecast" + String(describing: result.minuteForecast))
-                print(result.currentWeather.symbolName)
-                weatherView.configure(with: result)
+                weatherView.configure(with: result, location: location)
             } catch {
                 print(String(describing: error))
             }
