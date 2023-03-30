@@ -11,6 +11,8 @@ import CoreLocation
 
 final class WeatherView: UIView {
 
+    private let loadingView = LoadingView()
+
     private let iconView: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "star.square"))
         image.contentMode = .scaleAspectFill
@@ -66,6 +68,17 @@ final class WeatherView: UIView {
         addSubview(locationLabel)
         addSubview(feelsLikeLabel)
         addSubview(lastUpdateLabel)
+        addSubview(loadingView)
+
+        loadingView.backgroundColor = .white
+        
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loadingView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            loadingView.topAnchor.constraint(equalTo: topAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
 
         NSLayoutConstraint.activate([
 
@@ -101,6 +114,7 @@ final class WeatherView: UIView {
     }
 
     func configure(with data: Weather?, location: CLLocation?) {
+        loadingView.isHidden = false
         if let location = location {
             let geocoder = CLGeocoder()
             geocoder.reverseGeocodeLocation(location) { placemarks, error in
@@ -112,6 +126,7 @@ final class WeatherView: UIView {
 
                 DispatchQueue.main.async {
                     self.locationLabel.text = placemarks.locality ?? "No where"
+                    self.loadingView.isHidden = true
                 }
             }
         }
@@ -131,5 +146,6 @@ final class WeatherView: UIView {
             dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
             lastUpdateLabel.text = "last updated: " + dateFormatter.string(from: data.currentWeather.date)
         }
+
     }
 }

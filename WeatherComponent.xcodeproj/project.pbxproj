@@ -14,6 +14,7 @@
 		135B722F29D5862F0091FAF8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 135B722E29D5862F0091FAF8 /* Assets.xcassets */; };
 		135B723229D5862F0091FAF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 135B723029D5862F0091FAF8 /* LaunchScreen.storyboard */; };
 		13ECFCA329D5A1C700A70C5B /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13ECFCA229D5A1C700A70C5B /* WeatherView.swift */; };
+		13ECFCA529D5CAE100A70C5B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13ECFCA429D5CAE100A70C5B /* LoadingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		135B723329D5862F0091FAF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		135B723D29D59BA80091FAF8 /* WeatherComponent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WeatherComponent.entitlements; sourceTree = "<group>"; };
 		13ECFCA229D5A1C700A70C5B /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
+		13ECFCA429D5CAE100A70C5B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 				135B722729D5862E0091FAF8 /* SceneDelegate.swift */,
 				135B722929D5862E0091FAF8 /* ViewController.swift */,
 				13ECFCA229D5A1C700A70C5B /* WeatherView.swift */,
+				13ECFCA429D5CAE100A70C5B /* LoadingView.swift */,
 				135B722B29D5862E0091FAF8 /* Main.storyboard */,
 				135B722E29D5862F0091FAF8 /* Assets.xcassets */,
 				135B723029D5862F0091FAF8 /* LaunchScreen.storyboard */,
@@ -146,6 +149,7 @@
 				135B722A29D5862E0091FAF8 /* ViewController.swift in Sources */,
 				135B722629D5862E0091FAF8 /* AppDelegate.swift in Sources */,
 				135B722829D5862E0091FAF8 /* SceneDelegate.swift in Sources */,
+				13ECFCA529D5CAE100A70C5B /* LoadingView.swift in Sources */,
 				13ECFCA329D5A1C700A70C5B /* WeatherView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
